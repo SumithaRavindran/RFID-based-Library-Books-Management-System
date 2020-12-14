@@ -1,4 +1,5 @@
 ﻿<!-- Registration page for Library Books Management System
+    TCSS559: Project Group 2
     Author: Sumitha Ravindran
     Created on: 12/6/2020 -->
 
@@ -12,16 +13,6 @@
         form {
             text-align: center;
         }
-
-        .container {
-            width: 250px;
-            clear: both;
-        }
-
-            .container input {
-                width: 100%;
-                clear: both;
-            }
 
         input[type=submit] {
             background-color: #008CBA;
@@ -58,8 +49,9 @@
         <label for="password">Password:<span class="required" /></label><br>
         <input type="password" id="password" name="password" min="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required><br>
         <label for="confirm_password">Confirm Password:<span class="required" /></label><br>
-        <input type="password" id="confirm_password" name="confirm_password" min="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Re-enter your password to confirm" required><br>
+        <input type="password" id="confirm_password" name="confirm_password" min="8" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Not-Matching! Re-enter your password to confirm" required><br>
         <span id='message'></span><br>
+
         <input type="submit" id="btnSend" value="Register" /><br><br>
         <p><a href="/login.html">Click here to login!</a></p>
     </form>
@@ -74,6 +66,7 @@
         });
     </script>
 
+
     <script type="text/javascript">
         $("#btnSend").click(function () {
             var fn = $("#fname").val();
@@ -85,9 +78,10 @@
             var pass = $("#password").val();
             $.post("register?Fname=" + fn + "&Lname=" + ln + "&email=" + email + "&gender=" + gender + "&phNum=" + ph + "&Username=" + un + "&password=" + pass + "")
                 .done(function (data) {
-                    alert(data);
+                    alert(data)
                 });
         });
     </script>
+
 </body>
 </html>

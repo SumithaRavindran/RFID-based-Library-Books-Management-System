@@ -17,9 +17,14 @@
             justify-content: left;
         }
 
+        h1 {
+            text-align: center;
+            color: cornflowerblue;
+        }
+
         input[type=text] {
             border: none;
-            color: white;
+            color: black;
             padding: 10px 5px;
             text-decoration: none;
             margin: 4px 2px;
@@ -96,22 +101,24 @@
     </style>
 </head>
 <body>
-    <h1>Book Details</h1>
-    <h4>Filter Options</h4>
+    <h1>Book Details</h1><br>
+    <h4>Filter Options</h4><br>
     <div id="filterOptions">
-        <p>Genres:</p>
+        <p>Genres:</p>&nbsp;&nbsp;
         <select id="genre" name="genre-options">
             <option value="all">All Genres</option>
-        </select>
+        </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <form id="byRfid">
-            <label for="rfid">RFID:<span class="required" /></label><br>
+            <label for="rfid">RFID:<span class="required" />&nbsp;&nbsp;</label><br>
             <input type="text" id="rfid" name="rfid" required><br>
-            <input type="button" id="find" value="Find" /><br><br>
+            <input type="button" id="find" value="Find" /><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <p><a href="/Mainpage.html">Click here to visit Main Page!</a></p>
         </form>
         <label for="available">Show Available: </label><br>
         <input type="checkbox" id="available" name="available" value="available">
 
-    </div>
+    </div><br>
 
     <table id="books" ; style="width:100%">
         <thead>

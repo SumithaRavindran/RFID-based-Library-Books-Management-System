@@ -1,0 +1,77 @@
+﻿<!-- Upsert page for Library Books Management System
+    TCSS559: Project Group 2
+    Author: Sumitha Ravindran
+    Created on: 12/12/2020 -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <title>Services</title>
+    <style>
+
+        h2 {
+            text-align: center;
+            color: cornflowerblue;
+        }
+
+        img {
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+
+        input[type=submit] {
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <br>
+    <h2>RFID based Library Books Management Services</h2><br>
+
+    <form action="/upsert.html">
+        <input type="submit" value="Upsert Book">
+    </form><br>
+
+    <form action="/BookDetails.html">
+        <input type="submit" value="View book details">
+    </form><br>
+
+    <form action="/DetailsSOAP.asmx">
+        <input type="submit" value="View books using SOAP service">
+    </form><br>
+
+    <form action="/delete.html">
+        <input type="submit" value="Delete book record">
+    </form><br>
+
+    <form action="/updateUserID.html">
+        <input type="submit" value="CheckOut">
+    </form><br>
+
+    <form action="/MapDisplay.html">
+        <input type="submit" value="Location of Nearby Libraries">
+    </form><br>
+
+    <form action="/login.html">
+        <input type="submit" value="Logout">
+    </form><br>
+
+</body>
+</html>

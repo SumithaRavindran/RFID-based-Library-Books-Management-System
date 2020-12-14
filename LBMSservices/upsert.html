@@ -1,0 +1,92 @@
+﻿<!-- Upsert page for Library Books Management System
+    Author: Sumitha Ravindran
+    TCSS559: Project Group 2
+    Created on: 12/10/2020 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <title>Insert/Update Book details</title>
+    <style>
+        form {
+            text-align: center;
+        }
+
+        input[type=submit] {
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .required::after {
+            content: "*";
+            color: red;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>Insert/Update Book details</h1>
+
+    <form>
+
+        <label for="Rfid">RFID of the book:<span class="required" /></label><br>
+        <input type="number" id="Rfid" name="Rfid" required><br><br>
+
+        <label for="name">Name of the Book:<span class="required" /></label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="author">Author:<span class="required" /></label><br>
+        <input type="text" id="author" name="author" required><br><br>
+
+        <label for="genre">Genre:<span class="required" /></label><br>
+        <input type="text" id="genre" name="genre" required><br><br>
+
+        <label for="userID">User ID (enter userid as -1, if the book was not taken by the user):<span class="required" /></label><br>
+        <input type="number" id="userID" name="userID" required><br><br>
+
+        <label for="publishedOn">Published On:<span class="required" /></label><br>
+        <input type="date" id="publishedOn" name="publishedOn" required><br><br>
+
+        <label for="publicationCompany">Publication Company:<span class="required" /></label><br>
+        <input type="text" id="publicationCompany" name="publicationCompany" required><br><br>
+
+
+        <input type="submit" id="Send" value="Submit Book Details" /><br>
+        <p><a href="/BookDetails.html">Click here to check Book details Page!</a></p>
+        <p><a href="/Mainpage.html">Click here to visit Main Page!</a></p>
+    </form>
+
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+
+    <script type="text/javascript">
+
+        $("#Send").click(function () {
+            var rfid = $("#Rfid").val();
+            var name = $("#name").val();
+            var author = $("#author").val();
+            var genre = $("#genre").val();
+            var userID = $("#userID").val();
+            var publishedOn = $("#publishedOn").val();
+            var publicationCompany = $("#publicationCompany").val();
+
+            $.post("UpsertBook?Rfid=" + rfid + "&name=" + name + "&Author=" + author + "&genre=" + genre + "&userID=" + userID + "&publishedOn=" + publishedOn + "&publicationCompany=" + publicationCompany + "")
+            success: (function (data) {
+                console.log(data)
+                alert(data)
+            });
+            error: (function () {
+                alert('Error in Operation')
+            });
+        });
+    </script>
+
+</body>
+</html>

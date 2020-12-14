@@ -1,5 +1,6 @@
 ﻿/*
  * Library Books Management System 
+ * TCSS559: Project Group 2
  * Author: Sumitha Ravindran
  * Created on: 12/03/2020
  */
@@ -19,7 +20,8 @@ namespace LBMSservices.Controllers
         //Database Connection
         public MySqlCommand executeSQL()
         {
-            string cs = @"server=localhost;port=3306;userid=root;password=JordanRootPassword;database=LBMSdb";
+            //connection string
+            string cs = @"server=localhost;userid=root;password=ravithilagam;database=LibNET";
             MySqlConnection con = new MySqlConnection(cs);
             con.Open();
             MySqlCommand cmd = new MySqlCommand();
@@ -27,7 +29,7 @@ namespace LBMSservices.Controllers
             return cmd;
         }
 
-        //EmployeeRegistration
+        //Method for Employee Registration
 
         [HttpPost]
         [Route("register")]
@@ -35,6 +37,7 @@ namespace LBMSservices.Controllers
         {
             try
             {
+                //null check
                 if ((Fname == null) || (Lname == null) || (email == null) || (phNum == null) || (Username == null) || (password == null))
                 {
                     return ("Please fill all the required parameters in the form!");
@@ -42,8 +45,10 @@ namespace LBMSservices.Controllers
                 else
                 {
                     var cmd = executeSQL();
-                    cmd.CommandText = $"INSERT INTO Employees(Fname, Lname, email, gender, phoneNum, userName, pass) VALUES('{Fname}','{Lname}','{email}','{gender}','{phNum}','{Username}','{password}')";
+                    //insert query to insert employee record to the employees table
+                    cmd.CommandText = $"INSERT INTO LibNET.employees (Fname, Lname, email, gender, phoneNum, userName, pass) VALUES('{Fname}','{Lname}','{email}','{gender}','{phNum}','{Username}','{password}')";
                     var rowsAffected = cmd.ExecuteNonQuery();
+
                     if (rowsAffected == 1)
                     {
                         return "Registered Successfully";
@@ -55,21 +60,21 @@ namespace LBMSservices.Controllers
                 }
                 
             }
-            
+            //exception handling
             catch (Exception ex)
             {
                 return (ex.Message);
             }     
         }
 
-        //EmployeeLogin
-
+        //Method for Employee Login
         [HttpGet]
         [Route("login/{Username}/{password}")]
         public string EmployeeLogin(string Username, string password)
         {
             try
             {
+                //null check
                 if ((Username == null) || (password == null))
                 {
                     return ("Please fill all the required parameters in the form!");
@@ -77,15 +82,19 @@ namespace LBMSservices.Controllers
                 else
                 {
                     var cmd = executeSQL();
+                    //select query to check whether the username and password are existing and matching
                     cmd.CommandText = $"SELECT * FROM Employees WHERE userName='" + Username + "' and pass='" + password + "'";
                     MySqlDataReader reader = cmd.ExecuteReader();
                     var rowsAffected = reader.HasRows;
+                    
                     if (rowsAffected == false)
                     {
-                        return ("Username doesn't exist in the system, Please register your details!");
+                        //return message for a incorrect username and password
+                        return ("Username/Password doesn't exist in the system, Please register your details!");
                     }
                     else if (rowsAffected == true)
                     {
+                        //return successful message for correct username and password
                         return ("Login successful");
                     }
                     else
@@ -96,6 +105,7 @@ namespace LBMSservices.Controllers
             }
             catch (Exception ex)
             {
+                //return exception message
                 return (ex.Message);
             }
 

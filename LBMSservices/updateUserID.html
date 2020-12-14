@@ -1,0 +1,77 @@
+﻿<!-- Upsert page for Library Books Management System
+    TCSS559: Project Group 2
+    Author: Sumitha Ravindran
+    Created on: 12/11/2020 -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <title>Update User ID for a book</title>
+    <style>
+        form {
+            text-align: center;
+        }
+
+        input[type=submit] {
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .required::after {
+            content: "*";
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Checkout!!Update userID using RFID</h1> <br><br>
+    <form>
+        <label for="Rfid">Enter the RFID of the book:<span class="required" /></label><br>
+        <input type="number" id="Rfid" name="Rfid" required><br><br>
+
+        <label for="userID">Enter userID of the user:<span class="required" /></label><br>
+        <input type="number" id="userID" name="userID" required><br><br>
+
+        <input type="submit" id="update" value="Update" /><br><br>
+        <p><a href="/BookDetails.html">Click here to check Book details Page!</a></p>
+        <p><a href="/Mainpage.html">Click here to visit Main Page!</a></p>
+    </form>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript">
+        $("#update").click(function () {
+            var Rfid = $("#Rfid").val();
+            var userID = $("#userID").val();
+            $.ajax({
+                url: "https://localhost:44325/checkout?Rfid="+ Rfid,
+                type: 'PUT',
+                dataType: 'text',
+                contentType: 'application/json',
+                cache: false,
+                data: JSON.stringify({ "userID": userID }),
+
+                success: function (data) {
+                    console.log(data)
+                    alert(data)
+                },
+                complete: function (data) {
+                    console.log(data)
+                    alert(data)
+                },
+                error: function () {
+                    alert('Error in Operation')
+
+                }
+
+            })
+        });
+
+    </script>
+</body>
+</html>
