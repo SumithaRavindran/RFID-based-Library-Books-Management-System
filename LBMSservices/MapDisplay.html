@@ -1,0 +1,88 @@
+﻿<!-- Map Dsiplay page for Library Books Management System
+    Author: Jordan Overbo
+    Created on: 12/10/2020 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <title>Map</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+
+        #map {
+            position: center;
+            width: 90%;
+            height: 700px;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Map Of Library Locations</h1>
+    <div id="map"></div>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1oLbebkjmMyfrinUahYnxoj8QyS3MtQQ&callback=initMap">
+    </script>
+
+    <script type="text/javascript">
+        // Set up the map when the document is ready.
+        $(document).ready(function () {
+            var ip = "";
+            var lat;
+            var lon;
+
+            // Gets user ISP IP address.
+            $.getJSON("https://api.ipify.org?format=json")
+                .done(function (data) {
+                    ip = data.ip;
+                    var uri = "https://ipapi.co/" + ip + "/json/";
+
+                    // USer IP to get user ISP lat and lon to center map around
+                    $.getJSON(uri)
+                        .done(function (data) {
+                            lat = data.latitude;
+                            lon = data.longitude;
+                            // Get list of library locations from our DB.
+                            $.getJSON("map/locations")
+                                .done(function (data) {
+
+                                    // Build map with it centered aroound users ISP.
+                                    var map = new google.maps.Map(document.getElementById('map'), {
+                                        zoom: 9,
+                                        center: new google.maps.LatLng(lat, lon),
+                                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                                    });
+
+                                    var infowindow = new google.maps.InfoWindow();
+
+                                    var marker, i;
+
+                                    // Add markers with information at locations of all libraries in our DB.
+                                    for (i = 0; i < data.length; i++) {
+                                        marker = new google.maps.Marker({
+                                            position: new google.maps.LatLng(data[i].lat, data[i].lon),
+                                            map: map
+                                        });
+                                        console.log(data[i].name);
+                                        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                                            return function () {
+                                                infowindow.setContent("<p style='color:black'>" + data[i].name + "<br>" + data[i].address + "</p>");
+                                                infowindow.open(map, this);
+                                            }
+                                        })(marker, i));
+                                    }
+                                });
+                        });            
+                });
+        });
+    </script>
+</body>
+</html>

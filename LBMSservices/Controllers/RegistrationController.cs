@@ -19,7 +19,7 @@ namespace LBMSservices.Controllers
         //Database Connection
         public MySqlCommand executeSQL()
         {
-            string cs = @"server=localhost;userid=root;password=******;database=LBMSdb";
+            string cs = @"server=localhost;port=3306;userid=root;password=JordanRootPassword;database=LBMSdb";
             MySqlConnection con = new MySqlConnection(cs);
             con.Open();
             MySqlCommand cmd = new MySqlCommand();

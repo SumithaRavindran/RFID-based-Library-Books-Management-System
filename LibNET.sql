@@ -23,7 +23,7 @@ CREATE TABLE BOOKS (
 	userID int,
 	publishedOn DATE,
 	bookType varchar(30) NOT NULL,
-	publishedBy varvhar(50) NOT NULL,
+	publishedBy varchar(50) NOT NULL,
 	PRIMARY KEY (RFID)
 ); 
 

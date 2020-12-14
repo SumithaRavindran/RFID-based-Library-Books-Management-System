@@ -1,0 +1,277 @@
+﻿<!-- Book Details page for Library Books Management System
+    Author: Jordan Overbo
+    Created on: 12/7/2020 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <title>Book Details</title>
+    <style>
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+        }
+
+        input[type=text] {
+            border: none;
+            color: white;
+            padding: 10px 5px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        input[type=checkbox] {
+            border: none;
+            justify-content: left;
+            color: white;
+            padding: 10px 5px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        input[type=submit] {
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            padding: 10px 5px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .required::after {
+            content: "*";
+            color: red;
+        }
+
+        #filterOptions {
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+        }
+
+        #books table {
+            font-size: 0.9em;
+            font-family: sans-serif;
+            position: center;
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        #books thead tr {
+            background-color: #FFA500;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        #books th,
+        #books td {
+            padding: 12px 15px;
+        }
+
+        #books tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+            #books tbody tr:nth-of-type(even) {
+                background-color: #595454;
+            }
+
+        #books tbody tr:last-of-type {
+            border-bottom: 2px solid #FFA500;
+        }
+
+        #books tbody tr.active-row {
+            font-weight: bold;
+            color: #FFA500;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Book Details</h1>
+    <h4>Filter Options</h4>
+    <div id="filterOptions">
+        <p>Genres:</p>
+        <select id="genre" name="genre-options">
+            <option value="all">All Genres</option>
+        </select>
+        <form id="byRfid">
+            <label for="rfid">RFID:<span class="required" /></label><br>
+            <input type="text" id="rfid" name="rfid" required><br>
+            <input type="button" id="find" value="Find" /><br><br>
+        </form>
+        <label for="available">Show Available: </label><br>
+        <input type="checkbox" id="available" name="available" value="available">
+
+    </div>
+
+    <table id="books" ; style="width:100%">
+        <thead>
+            <tr>
+                <th scope="col">RFID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Author</th>
+                <th scope="col">Ebook URL</th>
+                <th scope="col">Genre</th>
+                <th scope="col">User ID</th>
+                <th scope="col">Published On</th>
+                <th scope="col">Publication Company</th>
+            </tr>
+        </thead>
+        <tbody id="display-books">
+
+        </tbody>
+    </table>
+
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+
+    <script type="text/javascript">
+        // Initially build the table with all book details and populate the genre dropdown.
+        $(document).ready(function () {
+            var uri = 'details/genre';
+            $.getJSON(uri)
+                .done(function (data) {
+                    // if successful, the data will contain a list of book genres
+                    $.each(data, function (key, item) {
+                        // add a drop down list ietm for the book genres.
+                        $("#genre").append("<option value = '" + item + "'>" + item + "</option>");
+                    });
+                });
+            getSOAP();
+
+        });
+
+        // SOAP call to get all of the book details from our DB.
+        function getSOAP() {
+            var soapMessage = `GET /DetailsSOAP.asmx/GetBooks? HTTP/1.1
+                                       Host: localhost`
+
+            var uri = 'DetailsSOAP.asmx/GetBooks';
+            $.ajax({
+                type: "GET",
+                url: uri,
+                contentType: "text/xml",
+                data: soapMessage,
+                processData: false,
+                dataType: "xml",
+                complete: SuccessOccur
+            });
+        }
+
+        // Function that is called when a successful SOAP call is returned. 
+        // Populates the books table with the book details from our DB.
+        function SuccessOccur(data, status, req) {
+            $(data.responseXML).find('books').find('book').each(function () {
+
+                // Populating the table of books with books corresponding to the correct genre.
+                var message = "<tr value = '" + $(this).find('name')[0].innerHTML + "'>" +
+                    "<th scope='row'>" + $(this).find('rfid')[0].innerHTML + "</td>" +
+                    "<td>" + $(this).find('name')[0].innerHTML + "</td>" +
+                    "<td>" + $(this).find('author')[0].innerHTML + "</td>" +
+                    "<td>" + $(this).find('ebook_url')[0].innerHTML + "</td>" +
+                    "<td>" + $(this).find('genre')[0].innerHTML + "</td>" +
+                    "<td>" + $(this).find('userID')[0].innerHTML + "</td>" +
+                    "<td>" + $(this).find('publishedOn')[0].innerHTML + "</td>" +
+                    "<td>" + $(this).find('publishedBy')[0].innerHTML + "</td>" +
+                    "</tr>";
+                $("#display-books").append(message);
+            });
+        }
+
+        // Listens for a change from the genre dropdown, changes the book detail table to
+        // display only books for the selected genre.
+        $('#genre').change(function () {
+            var uri2 = 'details/byGenre/' + $('#genre').val();
+            $('#display-books').empty();
+            $.getJSON(uri2)
+                .done(function (data) {
+                    // if successful, data will contain the list of books that match the genre selected
+                    $.each(data, function (key, item) {
+                        // Populating the table of books with books corresponding to the correct genre.
+                        var message = "<tr value = '" + item.name + "'>" +
+                            "<th scope='row'>" + item.Rfid + "</td>" +
+                            "<td>" + item.name + "</td>" +
+                            "<td>" + item.author + "</td>" +
+                            "<td>" + item.ebook + "</td>" +
+                            "<td>" + item.genre + "</td>" +
+                            "<td>" + item.userID + "</td>" +
+                            "<td>" + item.publishedOn + "</td>" +
+                            "<td>" + item.publicationCompany + "</td>" +
+                            "</tr>";
+                        $("#books").append(message);
+                    });
+                });
+            $("#byRfid")[0].reset();
+        });
+
+        // Listens for the available checkbox, if the available checkbox is clicked
+        // it will check if the boc is checked or unchecked, if checked, it will only display 
+        // books that are not checked out by anyone, unchecked will display all books.
+        $('#available').click(function () {
+            if ($(this).prop("checked") == true) {
+                var uri3 = 'details/available/'
+                $('#display-books').empty();
+                $.getJSON(uri3)
+                    .done(function (data) {
+                        // if successful, data will contain the list of books that match the genre selected
+                        $.each(data, function (key, item) {
+                            // Populating the table of books with books corresponding to the correct genre.
+                            var message = "<tr value = '" + item.name + "'>" +
+                                "<th scope='row'>" + item.Rfid + "</td>" +
+                                "<td>" + item.name + "</td>" +
+                                "<td>" + item.author + "</td>" +
+                                "<td>" + item.ebook + "</td>" +
+                                "<td>" + item.genre + "</td>" +
+                                "<td>" + item.userID + "</td>" +
+                                "<td>" + item.publishedOn + "</td>" +
+                                "<td>" + item.publicationCompany + "</td>" +
+                                "</tr>";
+                            $("#display-books").append(message);
+                        });
+                    });
+                $("#byRfid")[0].reset();
+            } else if ($(this).prop("checked") == false) {
+                $("#byRfid")[0].reset();
+                $('#display-books').empty();
+                getSOAP();
+            }
+        });
+
+        // Listens for the find by RFID button, when clicked, sends the value of the RFID in the tedxt field
+        // to our web service and displays only information for the selected book.
+        $("#find").click(function () {
+            var uri3 = 'details/byRfid/' + $("#rfid").val();
+            $('#display-books').empty();
+            $.getJSON(uri3)
+                .done(function (data) {
+                    // if successful, data will contain only the book with the correct RFID.
+                    $.each(data, function (key, item) {
+                        // Populating the table of books with books corresponding to the correct RFID.
+                        var message = "<tr value = '" + item.name + "'>" +
+                            "<th scope='row'>" + item.Rfid + "</td>" +
+                            "<td>" + item.name + "</td>" +
+                            "<td>" + item.author + "</td>" +
+                            "<td>" + item.ebook + "</td>" +
+                            "<td>" + item.genre + "</td>" +
+                            "<td>" + item.userID + "</td>" +
+                            "<td>" + item.publishedOn + "</td>" +
+                            "<td>" + item.publicationCompany + "</td>" +
+                            "</tr>";
+                        $("#display-books").append(message);
+                    });
+                });
+            $("#byRfid")[0].reset();
+            $("#available").reset();
+        });
+    </script>
+</body>
+</html>
