@@ -78,19 +78,19 @@ namespace LBMSservices.Controllers
                     //using JArray
                     JArray jarray = JArray.Parse(serviceResult);
 
-                    //checking only the object in the index 0
-                    if (jarray[0] != null)
+                    //checking the count 
+                    if (jarray.Count >= 1)
                     {
                         //getting only the value of the external_link from the object and storing it as a string variable 
                         string URL = jarray[0].SelectToken("_source.external_link").ToString();
                         return URL;
                     }
 
-                    else if (jarray[0] == null)
+                    else if (jarray.Count < 1)
                     {
                         //return error message when given book name is not available
-                        string Error = jarray.SelectToken("Error").ToString();
-                        return $" {Error} \n Book name is incorrect!! Please check your input.";
+                        
+                        return  "Book name is incorrect!! Please check your input.";
                     }
 
                     else
@@ -133,12 +133,12 @@ namespace LBMSservices.Controllers
                     bool AffectedRows = reader.HasRows;
                     reader.Close();
 
-                    //calling FindURL method to get the ebook url by giving book name as an input
-                    string URL = FindURL(name);
-
-
+                    
                     if (AffectedRows == false)
                     {
+                        //calling FindURL method to get the ebook url by giving book name as an input
+                        string URL = FindURL(name);
+
                         //insert query to add record to the books table
                         cmd.CommandText = $"INSERT INTO LibNET.books (Rfid, name, Author, ebook_url, genre, userID, publishedOn, publicationCompany) VALUES({Rfid},'{name}','{Author}','{URL}','{genre}',{userID},'{publishedOn}','{publicationCompany}')";
                         var rowsAffected = cmd.ExecuteNonQuery();
