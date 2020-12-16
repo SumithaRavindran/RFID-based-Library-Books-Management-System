@@ -21,7 +21,7 @@ namespace LBMSservices.Controllers
         public MySqlCommand executeSQL()
         {
             //connection string
-            string cs = @"server=localhost;userid=root;password=ravithilagam;database=LibNET";
+            string cs = @"server=localhost;userid=root;password=useyourpassword;database=LibNET";
             MySqlConnection con = new MySqlConnection(cs);
             con.Open();
             MySqlCommand cmd = new MySqlCommand();

@@ -22,7 +22,7 @@ namespace LBMSservices
         [WebMethod]
         public XmlDocument GetBooks()
         {
-            string cs = @"server=localhost;port=3306;userid=root;password=ravithilagam;database=LibNET";
+            string cs = @"server=localhost;port=3306;userid=root;password=useyourpassword;database=LibNET";
             MySqlConnection con = new MySqlConnection(cs);
             con.Open();
             MySqlCommand cmd = new MySqlCommand();
